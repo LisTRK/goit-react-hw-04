@@ -32,7 +32,6 @@ function App() {
     document.body.style.overflow = 'visible';
     setIsModalOpen(false);
     setModalData({});
-    console.log('Modal closed');
   };
 
   const submitForm = async (newQuery) => {
