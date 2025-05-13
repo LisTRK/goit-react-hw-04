@@ -1,0 +1,12 @@
+.wrapper {
+  margin: 0 auto;
+  max-width: 600px;
+  min-width: 600px;
+  padding: 30px;
+  border-radius: 30px;
+  background-color: #d43636b7;
+}
+
+.text {
+  font-size: 20px;
+}

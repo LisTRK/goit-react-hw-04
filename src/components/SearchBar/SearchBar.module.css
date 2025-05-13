@@ -1,0 +1,35 @@
+header {
+  background-color: #3f51b5; /* Приблизний колір верхньої панелі */
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+form {
+  display: flex;
+  width: 80%;
+  max-width: 600px;
+}
+
+input[type='text'] {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+}
+
+button[type='submit'] {
+  padding: 10px 15px;
+  background-color: #5c6bc0;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button[type='submit']:hover {
+  background-color: #3f51b5;
+}
