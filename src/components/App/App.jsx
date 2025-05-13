@@ -33,17 +33,18 @@ function App() {
   };
 
   const submitForm = async (newQuery) => {
-    const str = newQuery.trim();
     try {
       setPage(1);
-      if (str === '') {
-        return;
-      }
       setTotelPages(0);
       setIsError(false);
       setIsLoading(true);
       setQuery(newQuery);
       setImgData([]);
+      if (newQuery.trim() === '') {
+        setPage(0);
+        return;
+      }
+
       const response = await fetchImages(newQuery, page);
       setImgData(response.results);
       setTotelPages(response.total_pages);
@@ -74,12 +75,11 @@ function App() {
     }
 
     fetchData();
-  }, [page]);
+  }, [page, query]);
 
   return (
     <>
       <SearchBar onSubmit={submitForm} />
-      {query.trim() === '' && page === 1 && <p>Please, input your query</p>}
 
       {!isError ? (
         imgData.length > 0 && (

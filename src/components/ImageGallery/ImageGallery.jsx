@@ -1,19 +1,10 @@
 import ImageCard from '../ImageCard/ImageCard';
 import css from './ImageGallery.module.css';
 
-export default function ImageGallery({
-  imageGallery,
-  onClickImage,
-  setIsModalOpen,
-  setModalData,
-}) {
+export default function ImageGallery({ imageGallery, onClickImage }) {
   const render = imageGallery.map((img) => {
     return (
-      <li
-        key={img.id}
-        className={css.imageItem}
-        onClick={() => onClickImage(img, setIsModalOpen, setModalData)}
-      >
+      <li key={img.id} className={css.imageItem} onClick={onClickImage}>
         <ImageCard card={img} />
       </li>
     );

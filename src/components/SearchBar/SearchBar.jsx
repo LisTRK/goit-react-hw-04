@@ -1,4 +1,5 @@
 import { Formik, Form, Field } from 'formik';
+import toast, { Toaster } from 'react-hot-toast';
 import styles from './SearchBar.module.css';
 
 export default function SearchBar({ onSubmit }) {
@@ -6,6 +7,9 @@ export default function SearchBar({ onSubmit }) {
     query: '',
   };
   const handelSubmit = ({ query }, helpers) => {
+    if (query.trim() === '') {
+      toast('Please, input your query');
+    }
     onSubmit(query);
     helpers.resetForm();
   };
@@ -20,10 +24,14 @@ export default function SearchBar({ onSubmit }) {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
+            // onSubmit={() => {
+            //   query.trim === '' && toast('Please, input your query');
+            // }}
           />
           <button className={styles.button} type="submit">
             Search
           </button>
+          <Toaster />
         </Form>
       </Formik>
     </header>
