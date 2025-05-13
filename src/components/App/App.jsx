@@ -3,18 +3,16 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
-import axios from 'axios';
 import { ImageModal } from '../ImageModal/ImageModal';
 import { MoonLoader } from 'react-spinners';
 import { ErrorMessage } from '../ErrorMessage/ErrorMesage';
 import Modal from 'react-modal';
 import { fetchImages } from '../../api/fun-api';
-
 Modal.setAppElement('#root');
 
 function App() {
   const [imgData, setImgData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -35,18 +33,22 @@ function App() {
   };
 
   const submitForm = async (newQuery) => {
+    const str = newQuery.trim();
     try {
+      setPage(1);
+      if (str === '') {
+        return;
+      }
       setTotelPages(0);
       setIsError(false);
       setIsLoading(true);
       setQuery(newQuery);
       setImgData([]);
-      setPage(1);
       const response = await fetchImages(newQuery, page);
       setImgData(response.results);
       setTotelPages(response.total_pages);
     } catch (error) {
-      console.log('error:', error);
+      console.log('error:', error.message);
       setIsError(true);
     } finally {
       setIsLoading(false);
@@ -60,20 +62,11 @@ function App() {
     if (imgData.length === 0) return;
     async function fetchData() {
       try {
-        const response = await axios.get(
-          `https://api.unsplash.com/search/photos/`,
-          {
-            params: {
-              client_id: KEY_ID,
-              query: query,
-              page: page,
-            },
-          },
-        );
+        const response = await fetchImages(query, page);
 
-        setImgData((prevImgData) => [...prevImgData, ...response.data.results]);
+        setImgData((prevImgData) => [...prevImgData, ...response.results]);
       } catch (error) {
-        console.log('error:', error);
+        console.log('error:', error.message);
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -86,6 +79,7 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={submitForm} />
+      {query.trim() === '' && page === 1 && <p>Please, input your query</p>}
 
       {!isError ? (
         imgData.length > 0 && (
