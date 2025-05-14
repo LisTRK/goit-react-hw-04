@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import './App.css';
+import { useState, useEffect } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
@@ -8,15 +8,16 @@ import { MoonLoader } from 'react-spinners';
 import { ErrorMessage } from '../ErrorMessage/ErrorMesage';
 import Modal from 'react-modal';
 import { fetchImages } from '../../api/fun-api';
+
 Modal.setAppElement('#root');
 
 function App() {
   const [imgData, setImgData] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [totalPages, setTotelPages] = useState();
+  const [totalPages, setTotelPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
 
@@ -32,40 +33,30 @@ function App() {
     setModalData({});
   };
 
-  const submitForm = async (newQuery) => {
-    try {
-      setPage(1);
-      setTotelPages(0);
-      setIsError(false);
-      setIsLoading(true);
-      setQuery(newQuery);
-      setImgData([]);
-      if (newQuery.trim() === '') {
-        setPage(0);
-        return;
-      }
-
-      const response = await fetchImages(newQuery, page);
-      setImgData(response.results);
-      setTotelPages(response.total_pages);
-    } catch (error) {
-      console.log('error:', error.message);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
+  const submitForm = (newQuery) => {
+    setPage(1);
+    setTotelPages(1);
+    setIsError(false);
+    setQuery(newQuery);
+    setImgData([]);
   };
+
   const onChange = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
   useEffect(() => {
-    if (imgData.length === 0) return;
+    if (!query) {
+      return;
+    }
+
     async function fetchData() {
       try {
+        setIsLoading(true);
         const response = await fetchImages(query, page);
 
         setImgData((prevImgData) => [...prevImgData, ...response.results]);
+        setTotelPages(response.total_pages);
       } catch (error) {
         console.log('error:', error.message);
         setIsError(true);

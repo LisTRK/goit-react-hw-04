@@ -9,6 +9,7 @@ export default function SearchBar({ onSubmit }) {
   const handelSubmit = ({ query }, helpers) => {
     if (query.trim() === '') {
       toast('Please, input your query');
+      return;
     }
     onSubmit(query);
     helpers.resetForm();
@@ -24,9 +25,6 @@ export default function SearchBar({ onSubmit }) {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            // onSubmit={() => {
-            //   query.trim === '' && toast('Please, input your query');
-            // }}
           />
           <button className={styles.button} type="submit">
             Search
